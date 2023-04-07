@@ -7,6 +7,7 @@
             Console.WriteLine("Prueba");
             using var icap = new IcapClient("localhost");
             icap.Scan("prueba.txt");
+            //icap.Scan("Billetes.pdf");
         }
     }
 }

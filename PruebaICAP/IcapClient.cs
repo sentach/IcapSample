@@ -12,7 +12,7 @@ namespace PruebaICAP
     {
         private const string USERAGENT = "IT-Kartellet ICAP Client/1.1";
         private const string ICAPTERMINATOR = "\r\n\r\n";
-        private const String HTTPTERMINATOR = "0\r\n\r\n";
+        private const string HTTPTERMINATOR = "0\r\n\r\n";
         readonly string server;
         private readonly int stdRecieveLength = 8192;
         private readonly int stdSendLength = 8192;
@@ -23,7 +23,7 @@ namespace PruebaICAP
         { 
             this.server = serverIp;
             sender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            sender.Connect(server, 1344);
+            sender.Connect(server, 1344); 
             var result = GetOptions();
             var keys = ParseHeader(result);
             if (!keys.ContainsKey("Preview") || !int.TryParse(keys["Preview"], out stdPreviewSize)) { throw new IcapException("Not preview size"); }
@@ -108,8 +108,8 @@ namespace PruebaICAP
                 while ((n = fileStream.Read(buffer, 0, stdSendLength)) > 0)
                 {
                     offset += n;  // offset for next reading
-                    sender.Send(Encoding.ASCII.GetBytes(buffer.Length.ToString("X") + "\r\n"));
-                    sender.Send(buffer);
+                    sender.Send(Encoding.ASCII.GetBytes(n.ToString("X") + "\r\n"));
+                    sender.Send(buffer, n, SocketFlags.None);
                     sender.Send(Encoding.ASCII.GetBytes("\r\n"));
                 }
                 //Closing file transfer.
